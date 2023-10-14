@@ -9,12 +9,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export async function POST(req: NextRequest) {
   const { data } = await req.json();
   const { amount } = data;
+  const { metadata } = data;
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Number(amount) * 100,
       currency: "BRL",
       metadata: {
-
+        metadata
       }
     });
 

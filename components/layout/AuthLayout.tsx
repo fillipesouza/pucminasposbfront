@@ -27,7 +27,7 @@ export default function AuthLayout({ children, title
                     </Head>
                     <main className="h-screen bg-bg text-white/90">
                         <header className="mb-10">
-                            <MenuBar />
+                            <MenuBar session={session} />
                         </header>
                         <div className="flex flex-col">
                             {children}

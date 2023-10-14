@@ -1,6 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
-const BASE_URL = "https://g1j5wrxrz8.execute-api.us-east-1.amazonaws.com/prod/mgsense";
+export const BASE_URL = "https://g1j5wrxrz8.execute-api.us-east-1.amazonaws.com/prod/mgsense";
 async function refreshToken(refreshToken: string) {
   const res = await fetch(BASE_URL + "/auth/refresh", {
     method: "POST",

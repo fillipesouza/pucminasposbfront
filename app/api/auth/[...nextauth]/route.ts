@@ -2,6 +2,7 @@ import NextAuth, { NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import CognitoProvider from "next-auth/providers/cognito";
 import { decode } from 'next-auth/jwt';
+import { BASE_URL } from '@/lib/fetchApi';
 
 
 export const authOptions: NextAuthOptions = {
@@ -20,6 +21,18 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, account, profile }) {
       // Return true to allow sign in and false to block sign in.
       
+      const res = await fetch(BASE_URL + "/auth", {
+        method: "POST",
+        headers: {
+          Authorization: `${account?.id_token}`,
+          origin: 'http://localhost:3000'
+        },
+        body: JSON.stringify({email: user.email})
+      });
+      const userData = await res.json(); 
+      console.log("userData", userData)
+      user.data = userData;
+    
       return true;
     },
     async redirect({ url, baseUrl }){
@@ -32,6 +45,7 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = account.access_token
         token.idToken = account.id_token
         token.refreshToken = account.refresh_token
+        token.userData = user.data
       }
       console.log(token);
       return token
@@ -41,6 +55,7 @@ export const authOptions: NextAuthOptions = {
       session.user.accessToken = token.accessToken
       session.user.refreshToken = token.refreshToken
       session.user.idToken = token.idToken
+      session.user.data = token.userData
       
       console.log("SESSION")
       console.log(session)

@@ -92,7 +92,7 @@ export default function Home() {
         <PaymentForm metadata={form} />
         <br />
         <br />
-        <center><button className="btn btn-warning" onClick={() => setPagamento(false)}>Voltar</button></center>
+        <center><button className="btn btn-warning" onClick={() => setPagamento(false)}>Back</button></center>
       </Elements>
     }
     

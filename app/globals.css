@@ -16,7 +16,7 @@ html {
 }
 
 .my-nav-item :hover {
-    background-color: orange;
+    background-color: #dd7722;
     color: white !important;
     padding: 0.5rem;
     
@@ -28,5 +28,9 @@ html {
 }
 
 .navbar-toggler {
-    background-color: orange !important;
+    background-color: #dd7722 !important;
+}
+
+.my-button:hover {
+    background-color: #dd7722 !important;
 }
