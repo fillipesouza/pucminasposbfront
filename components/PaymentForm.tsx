@@ -2,7 +2,12 @@
 
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
+import MyModal from './MyModal'
+import bootstrap from 'bootstrap';
+import SpinnerLoading from "./SpinnerLoading";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
+import { useRouter } from 'next/navigation'
 
 export default function PaymentForm({ metadata
 }: {
@@ -18,32 +23,44 @@ export default function PaymentForm({ metadata
 
   const stripe = useStripe();
   const elements = useElements();
+  const [modal, setModal] = useState({show: false, success: false, title: ''})
+  const [loading, setLoading] = useState(false);
+  const axiosAuth = useAxiosAuth();
+  const router = useRouter();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const cardElement = elements?.getElement("card");
+    
 
     try {
+      setLoading(true);
       if (!stripe || !cardElement) return null;
       const { data } = await axios.post("/api/create-payment-intent", {
         data: { amount: 89 },
       });
       console.log(data)
       const clientSecret = data;
-
-      await stripe?.confirmCardPayment(clientSecret, {
-        payment_method: { card: cardElement },
-      });
+      const res = await axiosAuth.post('/orders', { id: clientSecret, ...metadata})
+      console.log(res);
+      setModal({success: true, title: "Payment Successfully Sent", show: true });
+      //await stripe?.confirmCardPayment(clientSecret, {
+       // payment_method: { card: cardElement },
+      //});
     } catch (error) {
       console.log(error);
+      setModal({success: false, title: "Payment Failed", show: true });
+    } finally {
+      setLoading(false)
     }
   };
 
-  return (
+  if(loading) return (<SpinnerLoading title="Sending..." />)
+  else return (
     <form className="row" onSubmit={onSubmit}>
 
       <h4>Personal Data</h4>
-      <p>Address: {metadata.address + " " + metadata.number + " " + metadata.complement} </p>
+      <p>Address: {metadata.address + " " + metadata.number + " " + metadata.complement || ''} </p>
       <p>City: {metadata.city} - {metadata.state}  ZipCode: {metadata.zipcode}</p>
       <p>Telephone: {metadata.phone}   </p>
       <p>Additional info {metadata.obs} </p>
@@ -60,7 +77,7 @@ export default function PaymentForm({ metadata
       <br /><br />
       <hr />
 
-      <p><h3>Fill out the credit card information: </h3></p>
+      <h3><p>Fill out the credit card information: </p></h3>
       <CardElement className="card"
         options={{
           hidePostalCode: true,
@@ -80,6 +97,7 @@ export default function PaymentForm({ metadata
       
       <br />
       <hr />
+      <MyModal show={modal.show} title={modal.title} success={modal.success} handleClose={() => modal.success ? router.push('/') : setModal({...modal, show: false})}/>
       <br /><br />
       <button className="btn btn-success" type="submit">Submit</button>
     </form>

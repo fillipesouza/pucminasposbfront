@@ -51,8 +51,8 @@ export default function Home() {
         </div>
         <div className="mb-3 col-sm-3">
           <label htmlFor="state" className="form-label">State</label>
-        <select className="form-select" aria-label="state" id="state" name="state" onChange={handleInput}>
-          <option selected>Choose the State</option>
+        <select className="form-select" defaultValue={"DEFAULT"} aria-label="state" id="state" name="state" onChange={handleInput}>
+          <option value="DEFAULT" disabled>Choose the State</option>
           <option value="MG">MG</option>
           <option value="SP">SP</option>
           <option value="RJ">RJ</option>
@@ -64,8 +64,8 @@ export default function Home() {
         </div>
         <div className="mb-3 col-sm-6">
           <label htmlFor="size" className="form-label">Area size in m<sup>2</sup> (roughly)</label>
-        <select className="form-select" aria-label="size" id="size" name="size" onChange={handleInput}>
-          <option selected>Choose the area (in square meters)</option>
+        <select className="form-select"  defaultValue={"DEFAULT"} aria-label="size" id="size" name="size" onChange={handleInput}>
+          <option value="DEFAULT" disabled>Choose the area (in square meters)</option>
           <option value="1">20-50</option>
           <option value="2">50-150</option>
           <option value="3">150-300</option>
@@ -73,8 +73,8 @@ export default function Home() {
         </div>
         <div className="mb-3 col-sm-6">
           <label htmlFor="deviceNumber" className="form-label">Amount of devices (estimate)</label>
-        <select className="form-select" aria-label="deviceNumber" id="deviceNumber" name="deviceNumber" onChange={handleInput}>
-          <option selected>The number of devices you wish to deploy</option>
+        <select className="form-select"  defaultValue={"DEFAULT"} aria-label="deviceNumber" id="deviceNumber" name="deviceNumber" onChange={handleInput}>
+          <option value="DEFAULT" disabled>The number of devices you wish to deploy</option>
           <option value="1">1-5</option>
           <option value="2">5-15</option>
           <option value="3">15-30</option>

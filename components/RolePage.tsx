@@ -4,13 +4,20 @@ import { useState } from "react";
 import worker from '../images/worker.png';
 import client from '../images/client.png';
 import Image from "next/image";
+import MyModal from "./MyModal";
+import SpinnerLoading from "./SpinnerLoading";
+import { useRouter } from 'next/navigation'
 
 export default function RolePage({ email
 }: {
     email: string
 }) {
     const [role, setRole] = useState('')
-    const [form, setForm] = useState({});
+    const [form, setForm] = useState({email: ''});
+    const [modal, setModal] = useState({show: false, success: false, title: ''})
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+    
 
     const handleInput = (e: any) => {
         const { name, value } = e.target;
@@ -21,16 +28,27 @@ export default function RolePage({ email
   const sendDataToServer = async () => {
     form.email = email;
     let res;
+    setLoading(true);
+    try{
     if(role === 'customer'){        
         res = await axiosAuth.post("/customers", form);
     } else {
         res = await axiosAuth.post("/providers", form);
+    }
+    setModal({success: true, title: role.toUpperCase() + " data Successfully Sent", show: true });
+    } catch(error){
+        console.log(error);
+        setModal({success: false, title: "Could not send" + role.toUpperCase() + " data", show: true });
+
+    } finally {
+        setLoading(false);
     }
   };
 
 
     return (
         <div className="container">
+            {!loading && 
             <div className="row">
                 {!role &&
                     <>
@@ -123,8 +141,11 @@ export default function RolePage({ email
                     <center><button className="btn btn-warning" onClick={() => setRole('')}>Back to choose another role</button></center>
                 </>
                 }
+                 
 
-            </div>
+            </div> }
+            {loading && <SpinnerLoading title="Sending..." />}
+            <MyModal show={modal.show} title={modal.title} success={modal.success} handleClose={() => modal.success ? router.push('/api/auth/signout') : setModal({...modal, show: false})}/>
         </div>
     )
 }

@@ -21,24 +21,10 @@ const useAxiosAuth = () => {
       (error) => Promise.reject(error)
     );
 
-    const responseIntercept = axiosAuth.interceptors.response.use(
-      (response) => response,
-      async (error) => { 
-        localStorage.removeItem('token');
-        /*const prevRequest = error?.config;
-        if (error?.response?.status === 401 && !prevRequest?.sent) {
-          prevRequest.sent = true;
-          await refreshToken();
-          prevRequest.headers["Authorization"] = `${session?.user.idToken}`;
-          return axiosAuth(prevRequest);
-        } */
-        return Promise.reject(error);
-      }
-    );
+    
 
     return () => {
       axiosAuth.interceptors.request.eject(requestIntercept);
-      axiosAuth.interceptors.response.eject(responseIntercept);
     };
   }, [session, refreshToken]);
 
