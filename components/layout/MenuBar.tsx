@@ -20,23 +20,27 @@ export default function MenuBar({ session
         <li className="my-nav-item">
           <a   href="/">Home</a>
         </li>
-        {session && session.user && session.user.isCustomer ?
+        {session && session.user && session.user.data && session.user.data.isCustomer ?
         <>
         <li className="my-nav-item">
           <a  href="/devices">Devices</a>
         </li>
-        {session && session.user && session.user.isAdmin &&
+        {session && session.user && session.user.data && !session.user.data.invited &&
         <li className="my-nav-item">
           <a  href="/orders">New Order</a>
         </li>
+       
         }
+          {session && session.user && session.user.data && !session.user.data.invited && <li className="my-nav-item">
+        <a  href="/subadmin">Invite User</a>
+      </li> }
         </>
         : null }
-        {session && session.user && session.user.isProvider ?
+        {session && session.user && session.user.data && session.user.data.isProvider ?
         <>
         
         <li className="my-nav-item">
-          <a  href="/my-orders">My Orders</a>
+          <a  href="/myorders">My Orders</a>
         </li>
         </>
         : null } 

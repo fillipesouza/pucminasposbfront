@@ -57,6 +57,7 @@ export const authOptions: NextAuthOptions = {
       session.user.idToken = token.idToken
       session.user.data = token.userData
       
+      
       console.log("SESSION")
       console.log(session)
       
